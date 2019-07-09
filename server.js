@@ -54,7 +54,7 @@ function Location(query, geoData) {
   this.longitude = geoData.results[0].geometry.location.lng;
 }
   
-function searchForWeather(query){
+function searchForWeather(){
   let weatherArr = [];
   const weatherData = require('./data/darksky.json');
   weatherData.daily.data.forEach(day => {
@@ -65,7 +65,7 @@ function searchForWeather(query){
 }
 
 function Weather(weatherData){
-  let time = new Date(weatherData.time).toString().split('').slice(0, 15).join('');
+  let time = new Date(weatherData.time * 1000).toDateString();
   this.forecast = weatherData.summary;
   this.time = time;
 }
