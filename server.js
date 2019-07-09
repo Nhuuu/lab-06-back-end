@@ -20,9 +20,21 @@ app.get('/location', (request,response) => {
   }
   catch(error) {
     console.error(error);
-    response.status(500).send('Status: 500. So sorry, something went wrong.');
+    response.status(500).send('Status: 500. So sorry, something went wrong getting the location.');
   }
 });
+
+app.get('/weather', (request, response) => {
+  try {
+    const weatherData = searchForWeather();
+    response.send(weatherData);
+  }
+  catch(error) {
+    console.error(error);
+    response.status(500).send('Status: 500. Something went wrong getting the weather.')
+  }
+});
+
 
 app.use('*', (request, response) => {
   response.send('you got to the wrong place');
@@ -35,13 +47,28 @@ function searchToLatLong(query) {
   return location;
 }
   
-  // Refactor the searchToLatLong function to replace the object literal with a call to this constructor function:
-  function Location(query, geoData) {
-    this.search_query = query;
-    this.formatted_query = geoData.results[0].formatted_address;
-    this.latitude = geoData.results[0].geometry.location.lat;
-    this.longitude = geoData.results[0].geometry.location.lng;
-  }
+// Refactor the searchToLatLong function to replace the object literal with a call to this constructor function:
+function Location(query, geoData) {
+  this.search_query = query;
+  this.formatted_query = geoData.results[0].formatted_address;
+  this.latitude = geoData.results[0].geometry.location.lat;
+  this.longitude = geoData.results[0].geometry.location.lng;
+}
   
+function searchForWeather(query){
+  let weatherArr = [];
+  const weatherData = require('./data/darksky.json');
+  const weather = new Weather(weatherData);
+  weatherArr.push(weather);
+  return weatherArr;
+}
+
+function Weather(weatherData){
+  let time = new Date(weatherData.daily.data[0].time).toString()
+  this.forecast = weatherData.daily.summary;
+  this.time = time;
+}
+
+
 // Make sure the server is listening for requests
 app.listen(PORT, () => console.log(`App is listening on ${PORT}`) );
