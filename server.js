@@ -35,7 +35,6 @@ app.get('/weather', (request, response) => {
   }
 });
 
-
 app.use('*', (request, response) => {
   response.send('you got to the wrong place');
 })
@@ -58,14 +57,16 @@ function Location(query, geoData) {
 function searchForWeather(query){
   let weatherArr = [];
   const weatherData = require('./data/darksky.json');
-  const weather = new Weather(weatherData);
-  weatherArr.push(weather);
+  weatherData.daily.data.forEach(day => {
+    const weather = new Weather(day);
+    weatherArr.push(weather);
+  })
   return weatherArr;
 }
 
 function Weather(weatherData){
-  let time = new Date(weatherData.daily.data[0].time).toString()
-  this.forecast = weatherData.daily.summary;
+  let time = new Date(weatherData.time).toString().split('').slice(0, 15).join('');
+  this.forecast = weatherData.summary;
   this.time = time;
 }
 
