@@ -31,7 +31,7 @@ app.get('/weather', (request, response) => {
   }
   catch(error) {
     console.error(error);
-    response.status(500).send('Status: 500. Something went wrong getting the weather.')
+    response.status(500).send('Status: 500. Something went wrong getting the weather.');
   }
 });
 
