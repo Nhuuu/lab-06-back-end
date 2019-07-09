@@ -24,6 +24,10 @@ app.get('/location', (request,response) => {
   }
 });
 
+app.use('*', (request, response) => {
+  response.send('you got to the wrong place');
+})
+
 // Helper Functions
 function searchToLatLong(query) {
   const geoData = require('./data/geo.json');
